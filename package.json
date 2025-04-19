@@ -46,6 +46,14 @@
     "topics": {
       "hello": {
         "description": "Commands to say hello."
+      },
+      "call": {
+        "description": "description for call",
+        "subtopics": {
+          "external": {
+            "description": "description for call.external"
+          }
+        }
       }
     },
     "flexibleTaxonomy": true
