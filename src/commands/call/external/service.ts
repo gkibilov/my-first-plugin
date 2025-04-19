@@ -1,13 +1,15 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
+import { SfCommand } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
+import got from 'got';
 
-Messages.importMessagesDirectory(dirname(fileURLToPath(import.meta.url)));
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('my-first-plugin', 'call.external.service');
 
 export type CallExternalServiceResult = {
-  path: string;
+  text: string;
+  number: number;
+  found: boolean;
+  type: string;
 };
 
 export default class CallExternalService extends SfCommand<CallExternalServiceResult> {
@@ -15,22 +17,13 @@ export default class CallExternalService extends SfCommand<CallExternalServiceRe
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
 
-  public static readonly flags = {
-    name: Flags.string({
-      summary: messages.getMessage('flags.name.summary'),
-      description: messages.getMessage('flags.name.description'),
-      char: 'n',
-      required: false,
-    }),
-  };
-
   public async run(): Promise<CallExternalServiceResult> {
-    const { flags } = await this.parse(CallExternalService);
+    const result = await got<CallExternalServiceResult>(
+      'http://numbersapi.com/random/trivia?json'
+    ).json<CallExternalServiceResult>();
 
-    const name = flags.name ?? 'world';
-    this.log(`hello ${name} from src/commands/call/external/service.ts`);
-    return {
-      path: 'src/commands/call/external/service.ts',
-    };
+    this.log(result.text);
+
+    return result;
   }
 }
