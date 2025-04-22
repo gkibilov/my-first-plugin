@@ -1,9 +1,9 @@
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import CallExternalService from '../../../../src/commands/call/external/service.js';
+import CmlImportAsExpressionSet from '../../../../src/commands/cml/import/as-expression-set.js';
 
-describe('call external service', () => {
+describe('cml import as-expression-set', () => {
   const $$ = new TestContext();
   let sfCommandStubs: ReturnType<typeof stubSfCommandUx>;
 
@@ -16,7 +16,7 @@ describe('call external service', () => {
   });
 
   it('runs hello', async () => {
-    await CallExternalService.run([]);
+    await CmlImportAsExpressionSet.run([]);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
@@ -25,12 +25,12 @@ describe('call external service', () => {
   });
 
   it('runs hello with --json and no provided name', async () => {
-    const result = await CallExternalService.run([]);
-    expect(result.path).to.equal('src/commands/call/external/service.ts');
+    const result = await CmlImportAsExpressionSet.run([]);
+    expect(result.path).to.equal('src/commands/cml/import/as-expression-set.ts');
   });
 
   it('runs hello world --name Astro', async () => {
-    await CallExternalService.run(['--name', 'Astro']);
+    await CmlImportAsExpressionSet.run(['--name', 'Astro']);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)

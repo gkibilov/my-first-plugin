@@ -64,6 +64,17 @@
       },
       "connect": {
         "description": "description for connect"
+      },
+      "cml": {
+        "description": "description for cml",
+        "subtopics": {
+          "convert": {
+            "description": "description for cml.convert"
+          },
+          "import": {
+            "description": "description for cml.import"
+          }
+        }
       }
     },
     "flexibleTaxonomy": true

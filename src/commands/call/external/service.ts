@@ -19,7 +19,7 @@ export default class CallExternalService extends SfCommand<CallExternalServiceRe
 
   public async run(): Promise<CallExternalServiceResult> {
     const result = await got<CallExternalServiceResult>(
-      'http://numbersapi.com/random/trivia?json'
+      'http://numbersapi.com/random/trivia?json',
     ).json<CallExternalServiceResult>();
 
     this.log(result.text);
