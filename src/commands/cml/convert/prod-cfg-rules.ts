@@ -1,51 +1,12 @@
 import * as fs from 'node:fs/promises';
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
+import { ConfiguratorRuleInput } from '../../../shared/models.js';
+import { generateCMLFromGroup } from '../../../shared/cml.js';
+import { groupByNonIntersectingProduct2 } from '../../../shared/grouping.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('my-first-plugin', 'cml.convert.prod-cfg-rules');
-
-interface PcrRule {
-  ApiName: string;
-  ConfigurationRuleDefinition: string; // This is a JSON string that needs to be parsed
-  Description: string;
-  EffectiveFromDate: string;
-  EffectiveToDate: string;
-  Id: string;
-  IsDeleted: string;
-  Name: string;
-  ProcessScope: string;
-  RuleSubType: string;
-  RuleType: string;
-  Sequence: string;
-  Status: string;
-}
-
-interface ConfigurationRuleDefinition {
-  usageSubType: string;
-  sequence: number;
-  criteriaExpressionType: string;
-  apiName: string;
-  endDate: string | null;
-  criteria: unknown[];
-  scope: string;
-  name: string;
-  description: string;
-  actions: unknown[];
-  startDate: string;
-  status: string;
-}
-
-interface ConfigRuleDefinition {
-  apiName: string;
-  name: string;
-  description: string;
-  configurationRuleDefinition: ConfigurationRuleDefinition;
-  sequence: number;
-  status: string;
-  effectiveFromDate: string;
-  effectiveToDate: string | null;
-}
 
 export type CmlConvertProdCfgRulesResult = {
   path: string;
@@ -79,42 +40,65 @@ export default class CmlConvertProdCfgRules extends SfCommand<CmlConvertProdCfgR
   public async run(): Promise<CmlConvertProdCfgRulesResult> {
     const { flags } = await this.parse(CmlConvertProdCfgRules);
 
-    // TODO: log every flag
     const api = flags['cml-api'];
-    this.log(`Using CML API: ${api}`);
     const pcrFile = flags['pcr-file'];
-    this.log(`Using PCR File: ${pcrFile}`);
     const workspaceDir = flags['workspace-dir'];
-    this.log(`Using Workspace Directory: ${workspaceDir}`);
     const targetOrg = flags['target-org'];
+
+    this.log(`Using CML API: ${api}`);
+    this.log(`Using PCR File: ${pcrFile}`);
+    this.log(`Using Workspace Directory: ${workspaceDir}`);
     this.log(`Using Target Org: ${targetOrg.getUsername()}`);
 
-    // Read and parse the PCR file JSON
     const pcrFileContents = await fs.readFile(pcrFile, 'utf8');
-    const pcrData = JSON.parse(pcrFileContents) as PcrRule[];
+    const pcrData = JSON.parse(pcrFileContents) as Array<{
+      ApiName: string;
+      Name: string;
+      Description: string;
+      Sequence: string;
+      Status: string;
+      EffectiveFromDate: string;
+      EffectiveToDate?: string;
+      ConfigurationRuleDefinition: string;
+    }>;
 
-    // Log the structure of the first rule for inspection
     if (pcrData.length > 0) {
       this.log('First rule structure:');
       this.log(JSON.stringify(pcrData[0], null, 2));
     }
 
-    // Create list of configuration rule definitions
-    const configRuleDefinitions: ConfigRuleDefinition[] = pcrData.map((rule) => {
-      const parsedDefinition = JSON.parse(rule.ConfigurationRuleDefinition) as ConfigurationRuleDefinition;
-      return {
-        apiName: rule.ApiName,
-        name: rule.Name,
-        description: rule.Description,
-        configurationRuleDefinition: parsedDefinition,
-        sequence: parseInt(rule.Sequence, 10),
-        status: rule.Status,
-        effectiveFromDate: rule.EffectiveFromDate,
-        effectiveToDate: rule.EffectiveToDate || null,
-      };
+    const rules: ConfiguratorRuleInput[] = [];
+
+    for (const raw of pcrData) {
+      try {
+        const parsed = JSON.parse(raw.ConfigurationRuleDefinition) as ConfiguratorRuleInput;
+        rules.push(parsed);
+      } catch {
+        this.warn(`❌ Failed to parse ConfigurationRuleDefinition for rule: ${raw.Name}`);
+      }
+    }
+
+    this.log(`Parsed ${rules.length} valid configuration rules`);
+
+    const groups = groupByNonIntersectingProduct2(rules);
+    this.log(`Found ${groups.size} non-intersecting Product2 groups`);
+
+    const safeApi = api.replace(/[^a-zA-Z0-9_-]/g, '_');
+    let groupIndex = 1;
+
+    const writePromises = Array.from(groups.entries()).map(async ([product2Id, group]) => {
+      const cmlOutput = generateCMLFromGroup(group);
+      const fileName = groups.size === 1 ? `${safeApi}.cml` : `${safeApi}_${groupIndex++}.cml`;
+
+      const fullPath = workspaceDir ? `${workspaceDir}/${fileName}` : fileName;
+
+      this.log(`📦 Writing group with ${group.length} rules to ${fileName}`);
+
+      await fs.writeFile(fullPath, cmlOutput, 'utf8');
+      this.log(`✅ Wrote CML for Product2 ${product2Id} to ${fullPath}`);
     });
 
-    this.log(`Parsed ${configRuleDefinitions.length} configuration rules`);
+    await Promise.all(writePromises);
 
     return {
       path: 'src/commands/cml/convert/prod-cfg-rules.ts',
