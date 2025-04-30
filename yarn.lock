@@ -1688,7 +1688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsforce/jsforce-node@npm:^3.2.0, @jsforce/jsforce-node@npm:^3.6.1":
+"@jsforce/jsforce-node@npm:^3.2.0":
   version: 3.6.2
   resolution: "@jsforce/jsforce-node@npm:3.6.2"
   dependencies:
@@ -1703,6 +1703,24 @@ __metadata:
     node-fetch: "npm:^2.6.1"
     xml2js: "npm:^0.6.2"
   checksum: 10c0/8b08b6ddbbd451a72eca5af114c00629376ba42e158f5a7828b370241bd270d4631c3817426b3fde3b5facaaf12c49282dc16d704184fdb0735365d8f3eb4043
+  languageName: node
+  linkType: hard
+
+"@jsforce/jsforce-node@npm:^3.7.0":
+  version: 3.8.1
+  resolution: "@jsforce/jsforce-node@npm:3.8.1"
+  dependencies:
+    "@sindresorhus/is": "npm:^4"
+    base64url: "npm:^3.0.1"
+    csv-parse: "npm:^5.5.2"
+    csv-stringify: "npm:^6.4.4"
+    faye: "npm:^1.4.0"
+    form-data: "npm:^4.0.0"
+    https-proxy-agent: "npm:^5.0.0"
+    multistream: "npm:^3.1.0"
+    node-fetch: "npm:^2.6.1"
+    xml2js: "npm:^0.6.2"
+  checksum: 10c0/c81efff8021b74ded84fb4bc1c4a899842312a3efc616c33d52dc95310eb8864f1abdfa1168cc62ad3280e61907776f97eda6cb302c5d6dcde57ce7fc47afa67
   languageName: node
   linkType: hard
 
@@ -1913,8 +1931,8 @@ __metadata:
   linkType: hard
 
 "@salesforce/core@npm:^7.3.12, @salesforce/core@npm:^7.3.9":
-  version: 7.4.0
-  resolution: "@salesforce/core@npm:7.4.0"
+  version: 7.4.1
+  resolution: "@salesforce/core@npm:7.4.1"
   dependencies:
     "@jsforce/jsforce-node": "npm:^3.2.0"
     "@salesforce/kit": "npm:^3.1.2"
@@ -1934,15 +1952,15 @@ __metadata:
     proper-lockfile: "npm:^4.1.2"
     semver: "npm:^7.6.2"
     ts-retry-promise: "npm:^0.8.1"
-  checksum: 10c0/f5d460d006c28b7c1b200865bbe8dac0f8d3a707bfb59c83b1fb99079c80ff4f80c119be50a6618d15b95838153fedcb14678bde41b140046aa572af553417da
+  checksum: 10c0/45c267ebd50079753051b0a4ae559cea89767ee58d6cf82c243d1d6c67fd44b066f448488069e35bdb6d9d8248c02dfcab7351d27e79213fe7ea963f0b40b7cb
   languageName: node
   linkType: hard
 
 "@salesforce/core@npm:^8, @salesforce/core@npm:^8.5.1":
-  version: 8.6.4
-  resolution: "@salesforce/core@npm:8.6.4"
+  version: 8.10.0
+  resolution: "@salesforce/core@npm:8.10.0"
   dependencies:
-    "@jsforce/jsforce-node": "npm:^3.6.1"
+    "@jsforce/jsforce-node": "npm:^3.7.0"
     "@salesforce/kit": "npm:^3.2.2"
     "@salesforce/schemas": "npm:^1.9.0"
     "@salesforce/ts-types": "npm:^2.0.10"
@@ -1960,7 +1978,7 @@ __metadata:
     proper-lockfile: "npm:^4.1.2"
     semver: "npm:^7.6.3"
     ts-retry-promise: "npm:^0.8.1"
-  checksum: 10c0/d83d25d92ca50e73c09db75131f74175b74954ca75ed5fbfe332674f49c139af2c2f094e5dc6ba3964d839a1d65c49438de724b180c9e2d4366ed1dcf348891f
+  checksum: 10c0/c6271102cbaa769eb4cece1f7f025b33bd27cffe25fbc9eb750e9406310da4547820882d31cad9edf3b6b5f05c16ad20a07bc1a1f14c9199e87f89fd2ce7a150
   languageName: node
   linkType: hard
 
