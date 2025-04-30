@@ -1,3 +1,94 @@
+# BRE to CML Spike
+
+Export SC rules via `sf data export bulk`, edit the file if desired to remove unwanted rules.  
+Run the two-part migration process:
+
+1. `sf cml convert prod-cfg-rules`
+2. `sf cml import as-expression-set`
+
+Review the output and CML blobs created by conversion before import.  
+Review the output of the import.
+
+Add debug logging to both conversion and import.
+
+When creating CMLs for bundles, use the `--full-bundles` flag (default: true) during conversion to indicate whether to include all bundles or just the subset referenced in the rules.
+
+## Conversion Flow
+
+- Read SC Rules from the file and build a list of `ConfiguratorRuleInput` to mimic the JSON structure of `ConfigurationRuleDefinition`
+- Group rules by non-intersecting `Product2` IDs (CMLs can’t share products)
+- For each group:
+  - Query PCM for related products (for bundle rules) or root definitions (others)
+  - Build an in-memory representation of the CML
+  - Apply logic to build constraints
+
+Serialize the in-memory CML to a blob for import as an Expression Set.  
+Create `ExpressionSetConstraintObj` association records pointing to the `cml-api` name and write them to `cml-api_associations.csv`.
+
+## Import Flow
+
+- Import one CML at a time
+- Upsert the Expression Set using the `cml-api` name
+- Read and upsert `ExpressionSetConstraintObj` rows from the CSV (resolving FKs)
+- Upload the CML blob
+
+## Open Questions
+
+- Is there a GitHub repo we should be using for this dev?
+- Where can we learn more about Functions and calling CML logic from Admin UI?
+- SF or SFDX preferred?
+- Any CPU, RAM, or other limits to know?
+- Is debug flag supported by default?
+- Can we call the Product Discovery API from an SF Plugin?
+
+## Setup Steps
+
+1. **Convert:**
+
+   ```bash
+   sf dev generate command --name cml:convert:prod-cfg-rules
+   sf dev generate flag (target-org, pcr-file, cml-api, full-bundles, workspace-dir)
+   ```
+
+2. **Import:**
+   ```bash
+   sf dev generate command --name cml:import:as-expression-set
+   sf dev generate flag (target-org, context-definition, cml-api, workspace-dir)
+   ```
+
+## Execution Steps
+
+1. **Authenticate to target org**
+
+   ```bash
+   sf auth:web:login --instance-url https://sdb3.test1.pc-rnd.pc-aws.salesforce.com -a breMigOrg
+   sf org list
+   ```
+
+2. **Export SC Rules**
+
+   ```bash
+   sf data export bulk -o breMigOrg --query "SELECT ApiName, ConfigurationRuleDefinition, Description, EffectiveFromDate, EffectiveToDate, Id, IsDeleted, Name, ProcessScope, RuleSubType, RuleType, Sequence, Status FROM ProductConfigurationRule WHERE RuleType = 'Configurator'" --output-file data/ProductConfigurationRules.json --result-format json --wait 10 --all-rows
+   ```
+
+3. **Convert to CML**
+
+   ```bash
+   sf cml convert prod-cfg-rules --pcr-file export-ProductConfigurationRules.json --cml-api MIG_CML --workspace-dir data --target-org breMigOrg
+   ```
+
+4. **Import Expression Set**
+   ```bash
+   sf cml import as-expression-set --cml-api MIG_CML --context-definition PricingTransactionCD2 --workspace-dir data --target-org breMigOrg
+   ```
+
+## Debug
+
+```bash
+export NODE_OPTIONS='--inspect-brk'
+unset NODE_OPTIONS
+```
+
 # my-first-plugin
 
 [![NPM](https://img.shields.io/npm/v/my-first-plugin.svg?label=my-first-plugin)](https://www.npmjs.com/package/my-first-plugin) [![Downloads/week](https://img.shields.io/npm/dw/my-first-plugin.svg)](https://npmjs.org/package/my-first-plugin) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/salesforcecli/my-first-plugin/main/LICENSE.txt)
@@ -24,7 +115,7 @@ This repository provides a template for creating a plugin for the Salesforce CLI
 
 Salesforce CLI plugins are based on the [oclif plugin framework](<(https://oclif.io/docs/introduction.html)>). Read the [plugin developer guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_plugins.meta/sfdx_cli_plugins/cli_plugins_architecture_sf_cli.htm) to learn about Salesforce CLI plugin development.
 
-This repository contains a lot of additional scripts and tools to help with general Salesforce node development and enforce coding standards. You should familiarize yourself with some of the [node developer packages](#tooling) used by Salesforce. 
+This repository contains a lot of additional scripts and tools to help with general Salesforce node development and enforce coding standards. You should familiarize yourself with some of the [node developer packages](#tooling) used by Salesforce.
 
 Additionally, there are some additional tests that the Salesforce CLI will enforce if this plugin is ever bundled with the CLI. These test are included by default under the `posttest` script and it is required to keep these tests active in your plugin if you plan to have it bundled.
 
