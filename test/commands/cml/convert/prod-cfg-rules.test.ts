@@ -16,25 +16,52 @@ describe('cml convert prod-cfg-rules', () => {
   });
 
   it('runs hello', async () => {
-    await CmlConvertProdCfgRules.run([]);
+    await CmlConvertProdCfgRules.run([
+      '--target-org',
+      'test@example.com',
+      '--pcr-file',
+      'data/ProductConfigurationRules.json',
+      '--cml-api',
+      'test-api',
+      '--workspace-dir',
+      'data',
+    ]);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello world');
+    expect(output).to.include('Using Target Org: test@example.com');
   });
 
   it('runs hello with --json and no provided name', async () => {
-    const result = await CmlConvertProdCfgRules.run([]);
+    const result = await CmlConvertProdCfgRules.run([
+      '--target-org',
+      'test@example.com',
+      '--pcr-file',
+      'data/ProductConfigurationRules.json',
+      '--cml-api',
+      'test-api',
+      '--workspace-dir',
+      'data',
+    ]);
     expect(result.path).to.equal('src/commands/cml/convert/prod-cfg-rules.ts');
   });
 
   it('runs hello world --name Astro', async () => {
-    await CmlConvertProdCfgRules.run(['--name', 'Astro']);
+    await CmlConvertProdCfgRules.run([
+      '--target-org',
+      'test@example.com',
+      '--pcr-file',
+      'data/ProductConfigurationRules.json',
+      '--cml-api',
+      'test-api',
+      '--workspace-dir',
+      'data',
+    ]);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello Astro');
+    expect(output).to.include('Using Target Org: test@example.com');
   });
 });

@@ -16,25 +16,25 @@ describe('connect org', () => {
   });
 
   it('runs hello', async () => {
-    await ConnectOrg.run([]);
+    await ConnectOrg.run(['--target-org', 'test@example.com']);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello world');
+    expect(output).to.include('Connected to test@example.com');
   });
 
   it('runs hello with --json and no provided name', async () => {
-    const result = await ConnectOrg.run([]);
-    expect(result.path).to.equal('src/commands/connect/org.ts');
+    const result = await ConnectOrg.run(['--target-org', 'test@example.com']);
+    expect(result).to.be.an('array');
   });
 
   it('runs hello world --name Astro', async () => {
-    await ConnectOrg.run(['--name', 'Astro']);
+    await ConnectOrg.run(['--target-org', 'test@example.com']);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello Astro');
+    expect(output).to.include('Connected to test@example.com');
   });
 });

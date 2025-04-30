@@ -16,25 +16,52 @@ describe('cml import as-expression-set', () => {
   });
 
   it('runs hello', async () => {
-    await CmlImportAsExpressionSet.run([]);
+    await CmlImportAsExpressionSet.run([
+      '--target-org',
+      'test@example.com',
+      '--context-definition',
+      'test-context',
+      '--cml-api',
+      'test-api',
+      '--workspace-dir',
+      'data',
+    ]);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello world');
+    expect(output).to.include('Using Target Org: test@example.com');
   });
 
   it('runs hello with --json and no provided name', async () => {
-    const result = await CmlImportAsExpressionSet.run([]);
+    const result = await CmlImportAsExpressionSet.run([
+      '--target-org',
+      'test@example.com',
+      '--context-definition',
+      'test-context',
+      '--cml-api',
+      'test-api',
+      '--workspace-dir',
+      'data',
+    ]);
     expect(result.path).to.equal('src/commands/cml/import/as-expression-set.ts');
   });
 
   it('runs hello world --name Astro', async () => {
-    await CmlImportAsExpressionSet.run(['--name', 'Astro']);
+    await CmlImportAsExpressionSet.run([
+      '--target-org',
+      'test@example.com',
+      '--context-definition',
+      'test-context',
+      '--cml-api',
+      'test-api',
+      '--workspace-dir',
+      'data',
+    ]);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello Astro');
+    expect(output).to.include('Using Target Org: test@example.com');
   });
 });

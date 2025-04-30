@@ -1,6 +1,7 @@
 import { TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
+import got from 'got';
 import CallExternalService from '../../../../src/commands/call/external/service.js';
 
 describe('call external service', () => {
@@ -9,6 +10,15 @@ describe('call external service', () => {
 
   beforeEach(() => {
     sfCommandStubs = stubSfCommandUx($$.SANDBOX);
+    $$.SANDBOX.stub(got, 'get').resolves({
+      json: () =>
+        Promise.resolve({
+          text: '42 is the answer to life, the universe, and everything',
+          number: 42,
+          found: true,
+          type: 'trivia',
+        }),
+    });
   });
 
   afterEach(() => {
@@ -21,12 +31,12 @@ describe('call external service', () => {
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello world');
+    expect(output).to.match(/^\d+ is the .+$/);
   });
 
   it('runs hello with --json and no provided name', async () => {
     const result = await CallExternalService.run([]);
-    expect(result.path).to.equal('src/commands/call/external/service.ts');
+    expect(result.text).to.match(/^\d+ is the .+$/);
   });
 
   it('runs hello world --name Astro', async () => {
@@ -35,6 +45,6 @@ describe('call external service', () => {
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello Astro');
+    expect(output).to.match(/^\d+ is the .+$/);
   });
 });

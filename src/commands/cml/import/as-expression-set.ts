@@ -42,7 +42,12 @@ export default class CmlImportAsExpressionSet extends SfCommand<CmlImportAsExpre
     const { flags } = await this.parse(CmlImportAsExpressionSet);
 
     const name = flags.name ?? 'world';
-    this.log(`hello ${name} from src/commands/cml/import/as-expression-set.ts`);
+    this.log(`Using Target Org: ${flags['target-org'].getUsername()}`);
+    this.log(`Using Context Definition: ${flags['context-definition']}`);
+    this.log(`Using CML API: ${flags['cml-api']}`);
+    this.log(`Using Workspace Directory: ${flags['workspace-dir']}`);
+    this.log(`Hello ${name} from src/commands/cml/import/as-expression-set.ts`);
+
     return {
       path: 'src/commands/cml/import/as-expression-set.ts',
     };
