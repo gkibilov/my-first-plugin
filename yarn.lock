@@ -1688,7 +1688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsforce/jsforce-node@npm:^3.2.0, @jsforce/jsforce-node@npm:^3.6.1":
+"@jsforce/jsforce-node@npm:^3.2.0":
   version: 3.6.2
   resolution: "@jsforce/jsforce-node@npm:3.6.2"
   dependencies:
@@ -1703,6 +1703,24 @@ __metadata:
     node-fetch: "npm:^2.6.1"
     xml2js: "npm:^0.6.2"
   checksum: 10c0/8b08b6ddbbd451a72eca5af114c00629376ba42e158f5a7828b370241bd270d4631c3817426b3fde3b5facaaf12c49282dc16d704184fdb0735365d8f3eb4043
+  languageName: node
+  linkType: hard
+
+"@jsforce/jsforce-node@npm:^3.8.2":
+  version: 3.8.2
+  resolution: "@jsforce/jsforce-node@npm:3.8.2"
+  dependencies:
+    "@sindresorhus/is": "npm:^4"
+    base64url: "npm:^3.0.1"
+    csv-parse: "npm:^5.5.2"
+    csv-stringify: "npm:^6.4.4"
+    faye: "npm:^1.4.0"
+    form-data: "npm:^4.0.0"
+    https-proxy-agent: "npm:^5.0.0"
+    multistream: "npm:^3.1.0"
+    node-fetch: "npm:^2.6.1"
+    xml2js: "npm:^0.6.2"
+  checksum: 10c0/466d8a15d77b61969283eb3a61fafd32094331dace6f993a5f6512d798c6f493c9ac1e22d983b8b27643e4fa4a96adf83265a99e4e38e8af36f30f9836219dd8
   languageName: node
   linkType: hard
 
@@ -1913,8 +1931,8 @@ __metadata:
   linkType: hard
 
 "@salesforce/core@npm:^7.3.12, @salesforce/core@npm:^7.3.9":
-  version: 7.4.0
-  resolution: "@salesforce/core@npm:7.4.0"
+  version: 7.4.1
+  resolution: "@salesforce/core@npm:7.4.1"
   dependencies:
     "@jsforce/jsforce-node": "npm:^3.2.0"
     "@salesforce/kit": "npm:^3.1.2"
@@ -1934,15 +1952,15 @@ __metadata:
     proper-lockfile: "npm:^4.1.2"
     semver: "npm:^7.6.2"
     ts-retry-promise: "npm:^0.8.1"
-  checksum: 10c0/f5d460d006c28b7c1b200865bbe8dac0f8d3a707bfb59c83b1fb99079c80ff4f80c119be50a6618d15b95838153fedcb14678bde41b140046aa572af553417da
+  checksum: 10c0/45c267ebd50079753051b0a4ae559cea89767ee58d6cf82c243d1d6c67fd44b066f448488069e35bdb6d9d8248c02dfcab7351d27e79213fe7ea963f0b40b7cb
   languageName: node
   linkType: hard
 
 "@salesforce/core@npm:^8, @salesforce/core@npm:^8.5.1":
-  version: 8.6.4
-  resolution: "@salesforce/core@npm:8.6.4"
+  version: 8.11.4
+  resolution: "@salesforce/core@npm:8.11.4"
   dependencies:
-    "@jsforce/jsforce-node": "npm:^3.6.1"
+    "@jsforce/jsforce-node": "npm:^3.8.2"
     "@salesforce/kit": "npm:^3.2.2"
     "@salesforce/schemas": "npm:^1.9.0"
     "@salesforce/ts-types": "npm:^2.0.10"
@@ -1954,13 +1972,13 @@ __metadata:
     js2xmlparser: "npm:^4.0.1"
     jsonwebtoken: "npm:9.0.2"
     jszip: "npm:3.10.1"
-    pino: "npm:^9.4.0"
+    pino: "npm:^9.7.0"
     pino-abstract-transport: "npm:^1.2.0"
-    pino-pretty: "npm:^11.2.2"
+    pino-pretty: "npm:^11.3.0"
     proper-lockfile: "npm:^4.1.2"
     semver: "npm:^7.6.3"
     ts-retry-promise: "npm:^0.8.1"
-  checksum: 10c0/d83d25d92ca50e73c09db75131f74175b74954ca75ed5fbfe332674f49c139af2c2f094e5dc6ba3964d839a1d65c49438de724b180c9e2d4366ed1dcf348891f
+  checksum: 10c0/86ce41052855279095b36bd2212e45a4fa0af7da5d3437030aa4d4dfa36a7496e110819c6bdbf6366eff20eb43e86b5e9434002538390a12a5d762c631be9a80
   languageName: node
   linkType: hard
 
@@ -8563,7 +8581,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino-pretty@npm:^11.2.2":
+"pino-pretty@npm:^11.3.0":
   version: 11.3.0
   resolution: "pino-pretty@npm:11.3.0"
   dependencies:
@@ -8622,16 +8640,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:^9.4.0":
-  version: 9.5.0
-  resolution: "pino@npm:9.5.0"
+"pino@npm:^9.7.0":
+  version: 9.7.0
+  resolution: "pino@npm:9.7.0"
   dependencies:
     atomic-sleep: "npm:^1.0.0"
     fast-redact: "npm:^3.1.1"
     on-exit-leak-free: "npm:^2.1.0"
     pino-abstract-transport: "npm:^2.0.0"
     pino-std-serializers: "npm:^7.0.0"
-    process-warning: "npm:^4.0.0"
+    process-warning: "npm:^5.0.0"
     quick-format-unescaped: "npm:^4.0.3"
     real-require: "npm:^0.2.0"
     safe-stable-stringify: "npm:^2.3.1"
@@ -8639,7 +8657,7 @@ __metadata:
     thread-stream: "npm:^3.0.0"
   bin:
     pino: bin.js
-  checksum: 10c0/b06590c5f4da43df59905af1aac344432b43154c4c1569ebea168e7ae7fd0a4181ccabb769a6568cf3e781e1d1b9df13d65b3603e25ebb05539bcb02ea04215e
+  checksum: 10c0/c7f8a83a9a9d728b4eff6d0f4b9367f031c91bcaa5806fbf0eedcc8e77faba593d59baf11a8fba0dd1c778bb17ca7ed01418ac1df4ec129faeedd4f3ecaff66f
   languageName: node
   linkType: hard
 
@@ -8752,10 +8770,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"process-warning@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "process-warning@npm:4.0.0"
-  checksum: 10c0/5312a72b69d37a1b82ad03f3dfa0090dab3804a8fd995d06c28e3c002852bd82f5584217d9f4a3f197892bb2afc22d57e2c662c7e906b5abb48c0380c7b0880d
+"process-warning@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "process-warning@npm:5.0.0"
+  checksum: 10c0/941f48863d368ec161e0b5890ba0c6af94170078f3d6b5e915c19b36fb59edb0dc2f8e834d25e0d375a8bf368a49d490f080508842168832b93489d17843ec29
   languageName: node
   linkType: hard
 
